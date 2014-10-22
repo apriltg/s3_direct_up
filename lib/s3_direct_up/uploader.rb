@@ -13,6 +13,11 @@ module S3DirectUp
     def initialize(uploader=nil, options={})
       @uploader=uploader||CarrierWave::Uploader::Base
       @options=DefaultOptions.merge(options)
+      refresh_policy
+    end
+
+    def refresh_policy
+      @policy_raw=policy_raw
     end
 
     def get_fog_storage
@@ -78,7 +83,7 @@ module S3DirectUp
     end
 
     def encoded_policy
-      Base64.encode64(policy_raw.to_json).gsub("\n", '')
+      Base64.encode64(@policy_raw.to_json).gsub("\n", '')
     end
 
     def signature
